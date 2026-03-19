@@ -1,4 +1,4 @@
-<img width="1376" height="768" alt="image" src="https://github.com/user-attachments/assets/3314f5ce-7765-406c-be81-6c0579887a02" /># 🦄 GigPulse Parametric
+# 🦄 GigPulse Parametric
 **Next-Generation InsurTech for India’s Gig Economy**
 
 [![Build in Public Launch](https://img.shields.io/badge/LinkedIn-Official_Launch_Post-0A66C2?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/posts/hari-haran-192b22328_fusionfour-guidewiredevtrails-unicornchase-ugcPost-7438502661471047680-MMfF/)
@@ -79,6 +79,8 @@ To scale as a "Unicorn" InsurTech, GigPulse utilizes a High-Velocity Micro-Premi
 
 📊 Actuarial Trigger Matrix
 Our payouts are binary and "Zero-Touch." When the OpenWeatherMap API confirms a breach of these thresholds, the smart contract executes the payout immediately.
+
+<img width="1376" height="768" alt="image" src="https://github.com/user-attachments/assets/3314f5ce-7765-406c-be81-6c0579887a02" />
 
 📈 The Revenue & Sustainability Model
 The Micro-Subscription: Workers pay a weekly "Protection Fee" of ₹70. This is priced to be less than the cost of a single meal, making it accessible to 100% of the gig workforce.
