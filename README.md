@@ -19,11 +19,11 @@ GigPulse utilizes a MERN stack architecture integrated with real-time weather AP
 
 ```mermaid
 graph TD
-    classDef default fill:#f9f9f9,stroke:#333,stroke-width:2px;
-    classDef trigger fill:#ffe0b2,stroke:#f57c00,stroke-width:2px;
-    classDef ai fill:#e1bee7,stroke:#8e24aa,stroke-width:2px;
-    classDef success fill:#c8e6c9,stroke:#388e3c,stroke-width:2px;
-    classDef fallback fill:#ffcdd2,stroke:#d32f2f,stroke-width:2px;
+    classDef default fill:#f9f9f9,stroke:#333,stroke-width:2px,color:#000;
+    classDef trigger fill:#ffe0b2,stroke:#f57c00,stroke-width:2px,color:#000;
+    classDef ai fill:#e1bee7,stroke:#8e24aa,stroke-width:2px,color:#000;
+    classDef success fill:#c8e6c9,stroke:#388e3c,stroke-width:2px,color:#000;
+    classDef fallback fill:#ffcdd2,stroke:#d32f2f,stroke-width:2px,color:#000;
 
     A[Ravi is Delivering] --> B(Severe Weather hits >50mm Rain):::trigger
     B --> C{OpenWeatherMap API Triggers}:::trigger
@@ -32,6 +32,7 @@ graph TD
     D -->|Score < 85%| F[UX Fallback: Request 5-Sec Environment Scan]:::fallback
     F -->|Video Uploaded Async| E
 ```
+
 ## 🛡️ Adversarial Defense & Anti-Spoofing Strategy
 To counter the recent exploitation by organized GPS-spoofing syndicates, GigPulse abandons basic geolocation reliance. We implemented a Gemini AI-powered Multidimensional Trust Score algorithm that evaluates three distinct telemetry pillars in real-time before authorizing any zero-touch payout.
 
