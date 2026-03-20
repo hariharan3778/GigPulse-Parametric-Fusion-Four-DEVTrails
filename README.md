@@ -33,7 +33,7 @@ graph TD
     F -->|Video Uploaded Async| E
 ```
 ## 🛡️ Adversarial Defense & Anti-Spoofing Strategy
-To counter the recent exploitation by organized GPS-spoofing syndicates, GigPulse abandons basic geolocation reliance. We implemented a Gemini AI-powered Multidimensional Trust Score algorithm that evaluates three distinct telemetry pillars in real-time before authorizing any zero-touch payout.
+To survive the Market Crash—where a 500-worker syndicate used fake GPS to drain platform liquidity pools—GigPulse abandons basic geolocation reliance. We implemented a Gemini AI-powered Multidimensional Trust Score algorithm that evaluates three distinct telemetry pillars in real-time before authorizing any zero-touch payout.
 
 > [!IMPORTANT]
 > **👉 Read our full anti-spoofing architecture and Behavioral AI logic in our [SECURITY.md](./SECURITY.md) file.**
@@ -80,7 +80,7 @@ To scale as a "Unicorn" InsurTech, GigPulse utilizes a High-Velocity Micro-Premi
 Our payouts are binary and "Zero-Touch." When the OpenWeatherMap API confirms a breach of these thresholds, the smart contract executes the payout immediately.
 <img width="1376" height="768" alt="image" src="https://github.com/user-attachments/assets/3314f5ce-7765-406c-be81-6c0579887a02" />
 
-📈 The Revenue & Sustainability Model
+### 📈 The Revenue & Sustainability Model
 The Micro-Subscription: Workers pay a weekly "Protection Fee" of ₹70. This is priced to be less than the cost of a single meal, making it accessible to 100% of the gig workforce.
 
 Dynamic Solvency Pool: 85% of all premiums are locked into a Decentralized Liquidity Pool. Because extreme weather is geographically isolated (e.g., it rains in Chennai but not in Bangalore), the "Float" from unaffected regions provides the capital for the affected regions.
