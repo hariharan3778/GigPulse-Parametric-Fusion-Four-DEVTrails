@@ -32,28 +32,25 @@ graph TD
     D -->|Score < 85%| F[UX Fallback: Request 5-Sec Environment Scan]:::fallback
     F -->|Video Uploaded Async| E
 ```
-
 ## 🛡️ Adversarial Defense & Anti-Spoofing Strategy
 To counter the recent exploitation by organized GPS-spoofing syndicates, GigPulse abandons basic geolocation reliance. We implemented a Gemini AI-powered Multidimensional Trust Score algorithm that evaluates three distinct telemetry pillars in real-time before authorizing any zero-touch payout.
 
-A. Sensor Fusion (Physical Environment Validation)
+> [!IMPORTANT]
+> **👉 Read our full anti-spoofing architecture and Behavioral AI logic in our [SECURITY.md](./SECURITY.md) file.**
+
+**A. Sensor Fusion (Physical Environment Validation)**
 Spoofing software can fake a digital coordinate, but it cannot fake physics. The React frontend continuously polls the device hardware:
+* **Micro-Vibration Analysis:** A gig worker on a two-wheeler in a storm generates a chaotic acceleration signature. A spoofed phone lying on a desk generates a flatline `[0,0,0]` XYZ signature. We feed this time-series `DeviceMotionEvent` data into the Gemini API to detect non-human, algorithmic anomalies that standard hard-coded threshold checks might miss.
+* **Atmospheric Pressure:** Utilizing the device barometer, we cross-reference local pressure drops with meteorological data to confirm the presence of a storm system.
 
-Micro-Vibration Analysis: A gig worker on a two-wheeler in a storm generates a chaotic acceleration signature. A spoofed phone lying on a desk generates a flatline [0,0,0] XYZ signature. We feed this time-series DeviceMotionEvent data into the Gemini API to detect non-human, algorithmic anomalies that standard hard-coded threshold checks might miss.
-
-Atmospheric Pressure: Utilizing the device barometer, we cross-reference local pressure drops with meteorological data to confirm the presence of a storm system.
-
-B. Network Triangulation (Digital Footprint Validation)
+**B. Network Triangulation (Digital Footprint Validation)**
 We validate the physical GPS coordinate against the surrounding digital infrastructure by hashing nearby Wi-Fi MAC addresses and local Cell Tower IDs.
 
-C. The UX Balance: "Trust but Verify"
+**C. The UX Balance: "Trust but Verify"**
 If our AI flags a claim as suspicious, or if a genuine hardware/network failure drops a user's Trust Score below 85%, we do not outright reject honest workers like Ravi. Instead, the automated payout pauses and our fallback loop triggers:
-
-Local Capture: The app prompts Ravi for a 5-second "Environment Scan" (a video of the rain).
-
-Cryptographic Hashing: The video is instantly hashed (SHA-256) alongside the localized timestamp to prevent the use of old, pre-recorded videos.
-
-Asynchronous Upload: The compressed payload waits in local storage until a stable connection is re-established, ensuring fair payouts even in poor storm connectivity.
+1. **Local Capture:** The app prompts Ravi for a 5-second "Environment Scan" (a video of the rain).
+2. **Cryptographic Hashing:** The video is instantly hashed (SHA-256) alongside the localized timestamp to prevent the use of old, pre-recorded videos.
+3. **Asynchronous Upload:** The compressed payload waits in local storage until a stable connection is re-established, ensuring fair payouts even in poor storm connectivity.
 
 ## Telemetry Payload Example
 ```JSON
