@@ -1,0 +1,85 @@
+import express from 'express';
+import axios from 'axios';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import dotenv from 'dotenv';
+
+dotenv.config();
+const router = express.Router();
+
+// Initialize Gemini AI (Using 1.5 Flash as required for high-speed anomaly detection)
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+// ==========================================
+// 1. THE WEATHER TRIGGER ROUTE (Guidewire Slide 4)
+// ==========================================
+router.post('/check-weather', async (req, res) => {
+    try {
+        const { lat, lon } = req.body;
+        const apiKey = process.env.OPENWEATHER_API_KEY;
+
+        // Ping OpenWeatherMap for the specific ward
+        const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+        const response = await axios.get(weatherUrl);
+        const data = response.data;
+
+        // Extract rain data (1 hour volume)
+        const rainVolume = data.rain ? data.rain['1h'] : 0; 
+        const isSevereStorm = rainVolume > 10; 
+
+        res.status(200).json({
+            status: "success",
+            location: data.name,
+            weather: data.weather[0].description,
+            rain_1h_mm: rainVolume,
+            trigger_payout: isSevereStorm
+        });
+
+    } catch (error) {
+        console.error("Weather API Error:", error.message);
+        res.status(500).json({ error: "Failed to fetch weather data" });
+    }
+});
+
+// ==========================================
+// 2. THE GEMINI SENSOR FUSION ROUTE (Fraud Verification)
+// ==========================================
+router.post('/verify-fraud', async (req, res) => {
+    try {
+        const { accelerometer, barometer_hPa } = req.body;
+
+        const prompt = `
+        You are an InsurTech anti-fraud AI evaluating a gig worker's claim. 
+        A severe storm is happening, but we need to verify the worker is actually outside on a motorcycle, NOT spoofing their GPS from a desk.
+        
+        Analyze this raw smartphone sensor data:
+        - Accelerometer Variance (X, Y, Z): ${JSON.stringify(accelerometer)}
+        - Barometer: ${barometer_hPa} hPa
+        
+        Rules for evaluation:
+        1. If accelerometer variance is near [0, 0, 0], the phone is sitting flat on a table. This is a SPOOFING ATTACK.
+        2. A motorcycle in a storm will have high, chaotic variance.
+        3. A dropping barometer (below 1005 hPa) confirms bad weather locally.
+        
+        Respond ONLY with a valid JSON object in this exact format:
+        { "isSpoof": boolean, "trustScore": number, "reason": "short explanation" }
+        `;
+
+        const result = await model.generateContent(prompt);
+        const responseText = result.response.text();
+        
+        const cleanJson = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
+        const aiDecision = JSON.parse(cleanJson);
+
+        res.status(200).json({
+            status: "success",
+            sensor_analysis: aiDecision
+        });
+
+    } catch (error) {
+        console.error("Gemini AI Error:", error);
+        res.status(500).json({ error: "Sensor Fusion AI failed to evaluate." });
+    }
+});
+
+export default router;
