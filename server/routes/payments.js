@@ -22,25 +22,29 @@ router.post('/initiate-claim', async (req, res) => {
             });
         }
 
-        console.log(`🔍 Checking claims for User: ${worker._id}`);
+        const userIdStr = worker._id.toString();
+        console.log(`🔍 Checking claims for User: ${userIdStr}`);
 
-        // 2. Atomic Idempotency Check
+        // 2. Atomic Idempotency Check (Date-Check for today)
+        const startOfDay = new Date();
+        startOfDay.setHours(0, 0, 0, 0);
+
         const existingClaim = await mongoose.connection.db.collection('claims').findOne({ 
             $or: [
-                { userId: worker._id },
-                { userId: worker._id.toString() },
-                { userId: { $regex: new RegExp('^' + worker._id.toString() + '$', 'i') } }
-            ]
+                { userId: userIdStr },
+                { userId: new mongoose.Types.ObjectId(userIdStr) }
+            ],
+            timestamp: { $gte: startOfDay }
         });
 
         if (existingClaim) {
             console.log("🛑 IDEMPOTENCY TRIGGERED: Blocking duplicate.");
-            return res.status(429).json({ error: "Claim already processed for today." });
+            return res.status(429).json({ error: "Limit reached! Come back later." });
         }
 
         // 3. Save the Claim
         const newClaim = new Claim({
-            userId: worker._id.toString(),
+            userId: userIdStr,
             amount: 400,
             status: 'Paid',
             timestamp: new Date(),
@@ -50,6 +54,7 @@ router.post('/initiate-claim', async (req, res) => {
         });
 
         await newClaim.save();
+        console.log('DEBUG: Just saved ID ' + userIdStr);
         console.log("✅ Payout Successful! Claim Saved.");
 
         return res.status(200).json({ 
