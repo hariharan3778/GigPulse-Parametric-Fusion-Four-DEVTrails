@@ -38,8 +38,18 @@ const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
 mongoose.connect(MONGO_URI)
-    .then(() => {
+    .then(async () => {
         console.log('✅ Connected to MongoDB Database successfully!');
+        
+        try {
+            // "Hackathon Demo" Wipe: Clears existing claims on server restart
+            // Guarantees the very first UI click always returns "Success", and the second always triggers Idempotency.
+            await mongoose.connection.db.collection('claims').deleteMany({});
+            console.log('🧹 DEMO PREP: Cleared previous claims. Your first click will succeed!');
+        } catch (err) {
+            console.log("⚠️ Could not clear past claims:", err.message);
+        }
+
         app.listen(PORT, () => {
             console.log(`🚀 GigPulse Server running on port ${PORT}`);
         });

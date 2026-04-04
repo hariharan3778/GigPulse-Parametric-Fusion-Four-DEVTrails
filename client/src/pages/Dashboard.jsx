@@ -118,10 +118,16 @@ const Dashboard = () => {
       setShowSuccessModal(true);
     } catch (error) {
       console.error("Engine failure", error);
-      // Fallback for demo
-      setTrustScore(92);
-      setClaimStatus('approved');
-      setShowSuccessModal(true);
+      
+      // Update logic to check for 429 Limit Exceeded status
+      if (error?.response?.status === 429) {
+        setClaimStatus('rejected_limit');
+      } else {
+        // Fallback for demo
+        setTrustScore(92);
+        setClaimStatus('approved');
+        setShowSuccessModal(true);
+      }
     } finally {
       setIsVerifying(false);
       setIsLoading(false);
@@ -134,6 +140,43 @@ const Dashboard = () => {
 
   return (
     <div className="page-container relative">
+      {/* Limit Over Toast Alert with Framer Motion Shake Effect */}
+      <AnimatePresence>
+        {claimStatus === 'rejected_limit' && (
+          <motion.div
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ 
+              y: 0, 
+              opacity: 1,
+              x: [0, -10, 10, -10, 10, 0] // Shake effect
+            }}
+            exit={{ y: -100, opacity: 0 }}
+            transition={{ 
+              y: { type: "spring", stiffness: 200, damping: 20 },
+              x: { duration: 0.4, delay: 0.2 },
+              opacity: { duration: 0.2 }
+            }}
+            className="fixed top-6 left-1/2 -translate-x-1/2 z-50 p-4 md:p-5 bg-red-600/95 backdrop-blur-xl border-2 border-red-400 rounded-3xl shadow-[0_20px_50px_rgba(220,38,38,0.5)] flex flex-row items-center gap-4 w-[90%] max-w-2xl text-left"
+          >
+            <div className="w-12 h-12 rounded-full bg-red-500/50 flex items-center justify-center shrink-0 border border-red-400 animate-[pulse_2s_ease-in-out_infinite]">
+              <AlertTriangle size={24} className="text-white" />
+            </div>
+            <div className="flex-1">
+              <h4 className="text-white font-black text-lg tracking-tight leading-none mb-1 text-shadow-sm">🚫 Access Denied</h4>
+              <p className="text-white/95 text-sm font-semibold">
+                You cannot gain money again. Your daily limit is over. Please come back later!
+              </p>
+            </div>
+            <button 
+              onClick={() => setClaimStatus('idle')}
+              className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white font-black uppercase tracking-widest text-[10px] rounded-xl transition-all border border-white/30 shadow-sm"
+            >
+              Dismiss
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* SaaS Overlays */}
       <AnimatePresence>
         {isVerifying && <LoadingSpinner key="spinner" />}
