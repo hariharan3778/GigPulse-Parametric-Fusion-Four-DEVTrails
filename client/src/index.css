@@ -2,18 +2,20 @@
 
 @theme {
   --color-background: #050b18;
-  --color-surface: #0d1526;
-  --color-primary: #14b8a6; /* Teal */
-  --color-secondary: #10b981; /* Emerald */
+  --color-surface: #1A202C; /* Deep Navy */
+  --color-primary: #48BB78; /* Emerald */
+  --color-secondary: #2D3748; /* Slate Blue */
   --color-accent: #3b82f6; /* Blue */
-  --color-glass: rgba(255, 255, 255, 0.05);
-  --color-glass-border: rgba(255, 255, 255, 0.1);
+  --color-glass: rgba(255, 255, 255, 0.03);
+  --color-glass-border: rgba(255, 255, 255, 0.08);
   --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
 }
 
 @layer base {
   :root {
     font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-feature-settings: "cv02", "cv05", "cv08", "cv11";
+    letter-spacing: -0.011em;
     background-color: #050b18;
     color: white;
   }
@@ -29,8 +31,8 @@
 
 @layer components {
   .glass-card {
-    @apply bg-gradient-to-br from-white/[0.05] to-transparent backdrop-blur-3xl border border-white/10 rounded-3xl lg:rounded-[2.5rem] transition-all duration-500 overflow-hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    @apply bg-gradient-to-br from-white/[0.03] to-transparent backdrop-blur-3xl border border-white/[0.08] rounded-3xl lg:rounded-[2.5rem] transition-all duration-500 overflow-hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-sm equivalent */
   }
 
   .glass-card:hover {
@@ -55,8 +57,8 @@
   }
 
   .premium-gradient {
-    background: linear-gradient(135deg, #14b8a6 0%, #10b981 100%);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 4px 20px rgba(20, 184, 166, 0.2);
+    background: linear-gradient(135deg, #48BB78 0%, #2D3748 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 4px 20px rgba(72, 187, 120, 0.1);
   }
 
   .text-gradient {

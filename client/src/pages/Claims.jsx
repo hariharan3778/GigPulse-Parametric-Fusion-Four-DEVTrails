@@ -57,71 +57,71 @@ const Claims = () => {
       </div>
 
       <div className="glass-card overflow-hidden">
-        <div className="p-10 border-b border-white/5 flex items-center justify-between bg-white/[0.02]">
+        <div className="p-6 border-b border-white/[0.08] flex items-center justify-between bg-white/[0.02]">
            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Transaction Records</span>
            <div className="flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Last 30 Days</span>
            </div>
         </div>
         
         <div className="overflow-x-auto">
-          <table className="w-full text-left min-w-[700px]">
+          <table className="w-full text-left min-w-[700px] border-collapse">
             <thead className="bg-white/[0.01]">
-              <tr>
-                <th className="px-10 py-8 text-[11px] font-black text-slate-500 uppercase tracking-widest">Event Identification</th>
-                <th className="px-10 py-8 text-[11px] font-black text-slate-500 uppercase tracking-widest">Trigger Parametrics</th>
-                <th className="px-10 py-8 text-[11px] font-black text-slate-500 uppercase tracking-widest text-center">Status</th>
-                <th className="px-10 py-8 text-[11px] font-black text-slate-500 uppercase tracking-widest text-right">Net Payout</th>
-                <th className="px-10 py-8 text-[11px] font-black text-slate-500 uppercase tracking-widest text-right">Audit</th>
+              <tr className="border-b border-white/[0.05]">
+                <th className="px-8 py-6 text-[11px] font-black text-slate-500 uppercase tracking-widest">Event Identification</th>
+                <th className="px-8 py-6 text-[11px] font-black text-slate-500 uppercase tracking-widest">Trigger Parametrics</th>
+                <th className="px-8 py-6 text-[11px] font-black text-slate-500 uppercase tracking-widest text-center">Status</th>
+                <th className="px-8 py-6 text-[11px] font-black text-slate-500 uppercase tracking-widest text-right">Net Payout</th>
+                <th className="px-8 py-6 text-[11px] font-black text-slate-500 uppercase tracking-widest text-right">Audit</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-white/[0.05]">
               {claims.map((claim, idx) => (
-                <tr key={idx} className="hover:bg-white/[0.03] transition-all group">
-                  <td className="px-10 py-10">
-                    <div className="flex flex-col gap-2">
-                      <span className="text-base font-black text-white tracking-tight uppercase">{claim.id}</span>
+                <tr key={idx} className="hover:bg-white/[0.02] transition-all group even:bg-white/[0.01]">
+                  <td className="px-8 py-8">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-sm font-black text-white tracking-tight uppercase">{claim.id}</span>
                       <span className="text-[10px] text-slate-500 font-bold uppercase font-mono">{claim.date}</span>
                     </div>
                   </td>
-                  <td className="px-10 py-10">
+                  <td className="px-8 py-8">
                     <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20">
-                        <CloudRain size={18} className="text-primary" />
+                      <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center border border-primary/20">
+                        <CloudRain size={14} className="text-primary" />
                       </div>
-                      <div className="flex flex-col gap-1">
+                      <div className="flex flex-col">
                         <span className="text-xs font-black text-slate-200 uppercase tracking-tight">{claim.trigger}</span>
                         <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">{claim.type} Analysis</span>
                       </div>
                     </div>
                   </td>
-                  <td className="px-10 py-10">
+                  <td className="px-8 py-8">
                     <div className="flex justify-center">
-                      <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest ${claim.status === 'Paid' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/20 text-red-400 border border-red-500/20'}`}>
-                        {claim.status}
+                      <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border border-current bg-opacity-10 ${claim.status === 'Paid' ? 'text-emerald-400 bg-emerald-400' : 'text-red-400 bg-red-400'}`}>
+                        {claim.status === 'Paid' ? 'Settled' : 'Rejected'}
                       </span>
                     </div>
                   </td>
-                  <td className="px-10 py-10 text-right">
+                  <td className="px-8 py-8 text-right">
                     <div className="flex flex-col items-end gap-1">
-                      <span className={`text-2xl font-black ${claim.status === 'Paid' ? 'text-white' : 'text-slate-800'}`}>{claim.amount}</span>
+                      <span className={`text-xl font-black ${claim.status === 'Paid' ? 'text-white' : 'text-slate-700'}`}>{claim.amount}</span>
                       {claim.status === 'Paid' && (
-                        <span className="flex items-center gap-1 text-[8px] font-black uppercase tracking-widest text-emerald-500 bg-emerald-500/5 px-2 py-0.5 rounded-md border border-emerald-500/10">
+                        <span className="flex items-center gap-1 text-[8px] font-black uppercase tracking-widest text-emerald-500 bg-emerald-400/5 px-2 py-0.5 rounded-md border border-emerald-500/10">
                           <CheckCircle2 size={10} /> Verified
                         </span>
                       )}
                     </div>
                   </td>
-                  <td className="px-10 py-10">
+                  <td className="px-8 py-8">
                     <div className="flex justify-end">
                       {claim.status === 'Paid' ? (
-                        <div className="flex items-center gap-2 p-4 bg-emerald-500/10 rounded-2xl border border-emerald-500/20 text-[10px] text-emerald-500 font-black uppercase tracking-widest">
-                          <ShieldCheck size={14} /> Audit verified
+                        <div className="flex items-center gap-2 p-3 bg-emerald-500/5 rounded-xl border border-emerald-500/10 text-[9px] text-emerald-500 font-black uppercase tracking-widest">
+                          <ShieldCheck size={12} /> Audit Pass
                         </div>
                       ) : (
-                        <button className="flex items-center gap-2 p-4 bg-white/5 rounded-2xl border border-white/5 opacity-40 group-hover:opacity-100 group-hover:bg-primary/20 group-hover:border-primary/30 transition-all text-[10px] text-slate-400 group-hover:text-primary font-black uppercase tracking-widest">
-                          Verify <ArrowRight size={14} />
+                        <button className="flex items-center gap-2 p-3 bg-white/5 rounded-xl border border-white/5 opacity-40 group-hover:opacity-100 group-hover:bg-primary/20 group-hover:border-primary/30 transition-all text-[9px] text-slate-400 group-hover:text-primary font-black uppercase tracking-widest">
+                          Re-Verify <ArrowRight size={12} />
                         </button>
                       )}
                     </div>

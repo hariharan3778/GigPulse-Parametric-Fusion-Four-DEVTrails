@@ -34,9 +34,9 @@ const SuccessModal = ({ isOpen, onClose, amount = "400", trustScore = "92" }) =>
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", damping: 12, stiffness: 200, delay: 0.2 }}
-                className="w-24 h-24 bg-gradient-to-br from-emerald-500/30 to-emerald-500/10 rounded-full flex items-center justify-center border border-emerald-500/40 shadow-[0_0_30px_rgba(16,185,129,0.2)]"
+                className="w-24 h-24 bg-gradient-to-br from-primary/30 to-primary/10 rounded-full flex items-center justify-center border border-primary/40 shadow-[0_0_30px_rgba(72,187,120,0.2)]"
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/40">
+                <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary-600 rounded-full flex items-center justify-center shadow-lg shadow-primary/40">
                   <CheckCircle2 size={36} className="text-white drop-shadow-md" />
                 </div>
               </motion.div>
@@ -44,7 +44,7 @@ const SuccessModal = ({ isOpen, onClose, amount = "400", trustScore = "92" }) =>
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="absolute -top-3 -right-6 bg-gradient-to-r from-emerald-600 to-teal-500 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-white shadow-xl border border-white/20 shadow-emerald-500/30"
+                className="absolute -top-3 -right-6 bg-gradient-to-r from-primary to-teal-500 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-white shadow-xl border border-white/20 shadow-primary/30"
               >
                 Verified by Gemini
               </motion.div>
@@ -52,12 +52,12 @@ const SuccessModal = ({ isOpen, onClose, amount = "400", trustScore = "92" }) =>
 
             {/* AI Trust Score Badge */}
             <div className="flex items-center gap-2 mb-4 px-4 py-2 bg-white/[0.03] border border-white/10 rounded-full shadow-inner backdrop-blur-md">
-              <ShieldCheck size={14} className="text-emerald-400" />
+              <ShieldCheck size={14} className="text-primary" />
               <span className="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em]">
-                AI Trust Score: <span className="text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]">{trustScore}%</span>
+                AI Trust Score: <span className="text-primary drop-shadow-[0_0_8px_rgba(72,187,120,0.5)]">{trustScore}%</span>
               </span>
             </div>
-
+ Broadway
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-white/60 tracking-tighter uppercase mb-1 drop-shadow-xl border-b border-transparent">Claim Approved</h2>
             <p className="text-slate-400 text-[10px] sm:text-[11px] lg:text-xs font-bold uppercase tracking-[0.25em] mb-6 opacity-80">Parametric trigger verified instantly</p>
 
@@ -82,7 +82,7 @@ const SuccessModal = ({ isOpen, onClose, amount = "400", trustScore = "92" }) =>
 
             <button 
               onClick={onClose}
-              className="relative w-full py-4 premium-gradient rounded-2xl text-xs font-black uppercase tracking-[0.25em] text-white overflow-hidden group hover:brightness-125 transition-all duration-300 active:scale-[0.98] border border-white/20 shadow-[0_0_40px_rgba(16,185,129,0.3)] shrink-0"
+              className="relative w-full py-4 premium-gradient rounded-2xl text-xs font-black uppercase tracking-[0.25em] text-white overflow-hidden group hover:brightness-125 transition-all duration-300 active:scale-[0.98] border border-white/20 shadow-[0_0_40px_rgba(72,187,120,0.3)] shrink-0"
             >
               <span className="relative z-10 flex items-center justify-center gap-3 drop-shadow-md">
                  <CheckCircle2 size={18} className="text-white" />

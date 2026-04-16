@@ -137,7 +137,7 @@ const Navbar = ({ title, onNavigate }) => {
           <div className="relative" ref={notifRef}>
             <button
               onClick={() => { setNotifOpen(p => !p); setSearchOpen(false); }}
-              className="relative p-2.5 text-slate-400 hover:text-white transition-all bg-white/5 rounded-xl border border-white/5 hover:border-white/10"
+              className="relative p-2.5 text-slate-400 hover:text-white transition-all bg-white/[0.03] rounded-xl border border-white/[0.05] hover:border-white/[0.1] shadow-sm"
             >
               <Bell size={20} />
               {unreadCount > 0 && (
@@ -197,9 +197,9 @@ const Navbar = ({ title, onNavigate }) => {
           </div>
 
           {/* User Avatar */}
-          <div className="flex items-center gap-2 sm:gap-4 bg-white/5 p-1.5 sm:p-2.5 pr-3 sm:pr-6 rounded-xl sm:rounded-2xl border border-white/10 hover:bg-white/[0.08] cursor-pointer transition-all shrink-0 whitespace-nowrap">
+          <div className="flex items-center gap-2 sm:gap-4 bg-white/[0.03] p-1.5 sm:p-2.5 pr-3 sm:pr-6 rounded-xl sm:rounded-2xl border border-white/[0.05] hover:bg-white/[0.08] cursor-pointer transition-all shrink-0 whitespace-nowrap shadow-sm">
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/20 p-1">
-              <div className="w-full h-full rounded-lg premium-gradient flex items-center justify-center">
+              <div className="w-full h-full rounded-lg premium-gradient flex items-center justify-center shadow-inner">
                 <User size={16} className="text-white" />
               </div>
             </div>

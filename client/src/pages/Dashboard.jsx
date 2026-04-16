@@ -66,6 +66,7 @@ const Dashboard = () => {
 
   // Final SaaS Claim Logic
   const handleSmartClaim = async () => {
+    if (isLoading || isVerifying) return; // Steel Trap Guard
     setIsLoading(true);
     setClaimStatus('analyzing');
     setCurrentStep(1);
@@ -120,13 +121,12 @@ const Dashboard = () => {
       console.error("Engine failure", error);
       
       // Update logic to check for 429 Limit Exceeded status
-      if (error?.response?.status === 429) {
+      if (error?.response?.status === 429 || error?.status === 429) {
         setClaimStatus('rejected_limit');
       } else {
-        // Fallback for demo
-        setTrustScore(92);
-        setClaimStatus('approved');
-        setShowSuccessModal(true);
+        // Fallback or generic error
+        console.error("Generic Error", error);
+        setClaimStatus('idle');
       }
     } finally {
       setIsVerifying(false);
@@ -217,10 +217,20 @@ const Dashboard = () => {
       </div>
 
       {/* Main Grid: Figma Column Alignment */}
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] xl:grid-cols-3 gap-6">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, staggerChildren: 0.1 }}
+        className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] xl:grid-cols-3 gap-6"
+      >
         
         {/* COLUMN 1: Weekly Activity & Coverage Status */}
-        <div className="space-y-8 flex flex-col h-full">
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="space-y-8 flex flex-col h-full"
+        >
           {/* Profile & Activity Panel */}
           <div className="glass-card p-6 flex-1 flex flex-col justify-between">
             <div>
@@ -308,10 +318,15 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* COLUMN 2: Live Weather Analytics & Zero-Touch Claim */}
-        <div className="space-y-8 flex flex-col h-full">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="space-y-8 flex flex-col h-full"
+        >
           {/* Live Weather Analytics - Refactored per Figma */}
           <div className="glass-card p-6 flex-1 flex flex-col">
             <div className="flex items-center justify-between mb-8">
@@ -322,7 +337,12 @@ const Dashboard = () => {
                   Chennai Zone
                 </div>
               </div>
-              <Droplets size={24} className="text-primary/70" />
+              <motion.div 
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <Droplets size={24} className="text-primary/70" />
+              </motion.div>
             </div>
 
             <div className="grid grid-cols-2 gap-4 mb-8">
@@ -435,10 +455,15 @@ const Dashboard = () => {
                </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* COLUMN 3: AI Processing Pipeline (Persistent) */}
-        <div className="lg:col-span-1 h-full">
+        <motion.div 
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="lg:col-span-1 h-full"
+        >
           <div className="glass-card p-6 h-full flex flex-col">
             <h3 className="font-bold text-slate-400 text-[10px] uppercase tracking-widest mb-8">AI Processing Pipeline</h3>
             
@@ -532,8 +557,79 @@ const Dashboard = () => {
               )}
             </div>
           </div>
+        </motion.div>
+      </motion.div>
+
+      {/* TRANSACTION LEDGER - New Professional Section */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.4 }}
+        className="glass-card overflow-hidden"
+      >
+        <div className="p-6 border-b border-white/[0.08] flex items-center justify-between bg-white/[0.02]">
+           <div className="flex items-center gap-3">
+              <History size={18} className="text-primary" />
+              <h3 className="font-bold text-white text-sm uppercase tracking-widest">Recent Transactions</h3>
+           </div>
+           <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Live Updates</span>
+           </div>
         </div>
-      </div>
+        
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-white/[0.01] border-b border-white/[0.05]">
+                <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Reference ID</th>
+                <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Description</th>
+                <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Status</th>
+                <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/[0.05]">
+              {[
+                { id: 'GP-9102-CH', desc: 'Weather Payout (Chennai Zone)', status: 'Settled', amount: '₹400.00', date: 'Today' },
+                { id: 'GP-8831-CH', desc: 'Weather Payout (High Intensity)', status: 'Settled', amount: '₹400.00', date: 'Yesterday' },
+                { id: 'GP-7712-CH', desc: 'Policy Premium Payment', status: 'Verified', amount: '- ₹50.00', date: '14 Apr' },
+                { id: 'GP-6621-CH', desc: 'New Claim Initializing', status: 'Processing', amount: '₹0.00', date: 'Just now' }
+              ].map((tx, idx) => (
+                <tr key={idx} className="hover:bg-white/[0.02] transition-all group even:bg-white/[0.01]">
+                  <td className="px-6 py-4">
+                    <div className="flex flex-col">
+                      <span className="text-xs font-bold text-white tracking-tight">{tx.id}</span>
+                      <span className="text-[9px] text-slate-500 font-medium uppercase">{tx.date}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className="text-xs text-slate-300 font-medium">{tx.desc}</span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border border-current bg-opacity-10 ${
+                      tx.status === 'Settled' ? 'text-emerald-400 bg-emerald-400' :
+                      tx.status === 'Processing' ? 'text-amber-400 bg-amber-400' :
+                      'text-blue-400 bg-blue-400'
+                    }`}>
+                      {tx.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <span className={`text-xs font-black ${tx.amount.startsWith('-') ? 'text-slate-500' : 'text-white'}`}>
+                      {tx.amount}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="p-4 bg-white/[0.01] border-t border-white/[0.05] text-center">
+           <button className="text-[10px] font-black text-primary uppercase tracking-widest hover:underline transition-all">
+             View Complete Ledger
+           </button>
+        </div>
+      </motion.div>
 
       {/* SECURITY PANEL - Refactored as full-width vertical architecture */}
       <div className="glass-card p-6 md:p-10 space-y-12 w-full">
