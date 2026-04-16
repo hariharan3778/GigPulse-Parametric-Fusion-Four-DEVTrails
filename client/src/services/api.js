@@ -1,7 +1,8 @@
 import axios from 'axios';
 
+// 1. Pointed the base instance to your live Render API
 const api = axios.create({
-  baseURL: 'http://localhost:5017/api',
+  baseURL: 'https://gigpulse-parametric-fusion-four-devtrails.onrender.com/api',
 });
 
 /**
@@ -37,7 +38,9 @@ export const verifyFraudEngine = async (sensorData) => {
  */
 export const processPayout = async (claimData) => {
   try {
-    const response = await api.post('http://localhost:5017/api/payment/initiate-claim', claimData, {
+    // 2. Fixed the sneaky hardcoded localhost URL here! 
+    // Now it uses the dynamic baseURL properly.
+    const response = await api.post('/payment/initiate-claim', claimData, {
       headers: {
         'Content-Type': 'application/json'
       }
