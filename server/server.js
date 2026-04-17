@@ -10,7 +10,7 @@ dotenv.config();
 // ==========================================
 // ENVIRONMENT VARIABLE VALIDATION
 // ==========================================
-const requiredEnvVars = ['MONGO_URI', 'GEMINI_API_KEY', 'OPENWEATHER_API_KEY'];
+const requiredEnvVars = ['MONGO_URI', 'OPENWEATHER_API_KEY'];
 const missingVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
 
 if (missingVars.length > 0) {
