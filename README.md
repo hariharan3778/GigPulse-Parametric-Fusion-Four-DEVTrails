@@ -71,7 +71,7 @@ Spoofing GPS is easy; spoofing physics is impossible. GigPulse uses **Google Gem
 ## 📸 Interface Preview & Visual Evidence
 
 ### Transaction Ledger
-![Transaction Ledger Dashboard](docs/assets/ledger.png)
+<img width="1567" height="611" alt="Screenshot 2026-04-17 213832" src="https://github.com/user-attachments/assets/2303825b-784c-48e1-a1e7-c786ef298a51" />
 
 *Figure 1: Professional Transaction Ledger featuring transparent status indication, zebra-striping, and a high-end financial tool aesthetic.*
 
