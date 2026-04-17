@@ -55,7 +55,7 @@ router.post('/verify-trust', async (req, res) => {
 
         // Lazy-load the model
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
         // --- Resilience Layer 2: Payload Verification ---
         const { accelerometer, barometer_hPa } = req.body;
