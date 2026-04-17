@@ -43,6 +43,10 @@ graph TD
 > 📖 **[Read the System Architecture & Technical Specifications (PDF) →](https://drive.google.com/file/d/1uYbhqCRrvSwlLvf7Hnq9Eu24ctL3lWyC/view?usp=sharing)**
 > *Detailed teardown of our sensor fusion architecture and idempotency engine.*
 
+### 📈 Market & Business Impact
+> 📊 **[Read the Market Research & Adversarial Resilience Report (PDF) →](https://drive.google.com/file/d/1JIZ3Tw9RE_nySbMda_meTllo6fDKVUCN/view?usp=sharing)**
+> *Real-world case studies detailing GigPulse's UI/UX strategy and fraud-prevention solvency.*
+
 ---
 
 ## 🏆 Technical Highlights (Why We Win)
