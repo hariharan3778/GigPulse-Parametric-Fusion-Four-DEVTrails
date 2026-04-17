@@ -96,6 +96,11 @@ Spoofing GPS is easy; spoofing physics is impossible. GigPulse uses **Google Gem
   "status": "APPROVED_FOR_PAYOUT"
 }
 ```
+### 🔐 Deep Dive: Anti-Fraud Mechanics
+> 📖 **[Read our full Security & Anti-Fraud Architecture (SECURITY.md) →](./SECURITY.md)**
+> *Explore our dedicated documentation on Behavioral Continuity, Network Triangulation, and Trust-Centered Fallbacks.*
+
+---
 ## 💰 The Financial Engine: Parametric Revenue Model
 To scale as a "Unicorn" InsurTech, GigPulse utilizes a High-Velocity Micro-Premium Model, passing saved administrative overhead directly to gig workers.
 
