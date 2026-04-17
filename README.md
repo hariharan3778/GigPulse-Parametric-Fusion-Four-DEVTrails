@@ -162,6 +162,13 @@ npm run dev
 ```
 
 ---
+## 🙏 Acknowledgments
+* **Guidewire:** For hosting the incredible DEVTrails 2026 "Unicorn Chase" Hackathon and inspiring this solution.
+* **Google Gemini:** For powering our multidimensional Sensor Fusion AI.
+* **OpenWeatherMap:** For the reliable, real-time parametric weather telemetry.
+* **Razorpay:** For enabling our zero-touch, high-velocity payout engine.
+
+---
 
 ## 👥 Team Fusion Four
 * **Hari Haran K** - Team Lead & Product Strategy
