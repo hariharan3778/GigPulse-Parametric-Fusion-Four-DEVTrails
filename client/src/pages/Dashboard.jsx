@@ -46,6 +46,10 @@ const Dashboard = () => {
   const [showOverride, setShowOverride] = useState(false);
   const [trustScore, setTrustScore] = useState(null);
   const [currentStep, setCurrentStep] = useState(0);
+  const [sensorData, setSensorData] = useState({
+    accel: { x: 0, y: 0, z: 0 },
+    baro: 1013
+  });
 
   // Fetch real weather on mount
   useEffect(() => {
@@ -100,10 +104,25 @@ const Dashboard = () => {
 
       // 2. AI Fraud Check Engine (GitHub Task 4.2)
       setCurrentStep(3);
-      await verifyFraudEngine({ 
-        accelerometer: { x: 12.5, y: -8.2, z: 15.1 }, 
-        barometer_hPa: 998 
+      
+      // Simulated Real-Time Sensor Polling for Hackathon Demo
+      const simulatedTelemetry = {
+        accelerometer: { 
+          x: (Math.random() * 15 + 5).toFixed(1), 
+          y: (Math.random() * 10 - 5).toFixed(1), 
+          z: (Math.random() * 20 + 10).toFixed(1) 
+        },
+        barometer_hPa: (Math.random() * 10 + 995).toFixed(1)
+      };
+      
+      setSensorData({
+        accel: simulatedTelemetry.accelerometer,
+        baro: simulatedTelemetry.barometer_hPa
       });
+
+      const aiResponse = await verifyFraudEngine(simulatedTelemetry);
+      const score = aiResponse?.sensor_analysis?.trustScore || 85;
+      
       await new Promise(r => setTimeout(r, 800));
 
       // 3. Final Payout Processor
@@ -114,7 +133,7 @@ const Dashboard = () => {
         trustScore: 92
       });
 
-      setTrustScore(92);
+      setTrustScore(score);
       setClaimStatus('approved');
       setShowSuccessModal(true);
     } catch (error) {
@@ -652,9 +671,9 @@ const Dashboard = () => {
                title: 'Sensor Fusion Layer', 
                desc: 'Real-time device sensor validation',
                items: [
-                 { icon: <MapPin size={14} />, label: 'GPS', val: 'Location' },
-                 { icon: <Activity size={14} />, label: 'Accelerometer', val: 'Movement' },
-                 { icon: <ChevronDown size={14} />, label: 'Barometer', val: 'Pressure' }
+                 { icon: <MapPin size={14} />, label: 'GPS', val: realWeather?.location || 'Chennai' },
+                 { icon: <Activity size={14} />, label: 'Accelerometer', val: `${sensorData.accel.x}, ${sensorData.accel.y}` },
+                 { icon: <ChevronDown size={14} />, label: 'Barometer', val: `${sensorData.baro} hPa` }
                ],
                color: 'text-primary'
              },
@@ -739,10 +758,10 @@ const Dashboard = () => {
                  <div className="w-full md:w-96 space-y-4">
                     <div className="flex justify-between items-end">
                       <span className="text-[11px] font-black text-white uppercase tracking-widest">Current Trust Score</span>
-                      <span className="text-4xl font-black text-primary tracking-tighter">92%</span>
+                      <span className="text-4xl font-black text-primary tracking-tighter">{claimStatus !== 'idle' ? trustScore : '0'}%</span>
                     </div>
                     <div className="w-full bg-white/5 h-3 rounded-full overflow-hidden flex shadow-inner">
-                      <div className="bg-primary h-full w-[92%] shadow-[0_0_15px_#14b8a6]"></div>
+                      <div className="bg-primary h-full transition-all duration-1000 shadow-[0_0_15px_#14b8a6]" style={{ width: `${claimStatus !== 'idle' ? trustScore : 0}%` }}></div>
                     </div>
                     <div className="flex justify-between">
                        <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Threshold for Approval: 70%</span>

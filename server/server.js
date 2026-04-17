@@ -25,9 +25,19 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/payment', paymentRoutes);
 app.get('/api/health', (req, res) => {
+    const memory = process.memoryUsage();
     res.status(200).json({ 
         status: "success", 
-        message: "GigPulse Backend is running perfectly! Ready for Sensor Fusion." 
+        message: "GigPulse Backend is running perfectly!",
+        diagnostics: {
+            uptime: `${Math.floor(process.uptime())}s`,
+            memory: {
+                rss: `${Math.floor(memory.rss / 1024 / 1024)}MB`,
+                heapUsed: `${Math.floor(memory.heapUsed / 1024 / 1024)}MB`,
+            },
+            database: mongoose.connection.readyState === 1 ? "Connected" : "Disconnected",
+            environment: process.env.NODE_ENV || "production"
+        }
     });
 });
 
