@@ -114,11 +114,13 @@ To scale as a "Unicorn" InsurTech, GigPulse utilizes a High-Velocity Micro-Premi
 ## 📸 Interface Preview & Visual Evidence
 
 ### Transaction Ledger
-![Transaction Ledger Dashboard](docs/assets/ledger.png)
+<img width="1567" height="611" alt="Screenshot 2026-04-17 213832" src="https://github.com/user-attachments/assets/0ca1df66-7128-45cf-9763-6772ee9722eb" />
+
 *Figure 1: Professional Transaction Ledger featuring transparent status indication, zebra-striping, and a high-end financial tool aesthetic.*
 
 ### Security & Fraud Hub
-![Security and Fraud Hub with High Trust Score](docs/assets/security_hub.png)
+<img width="1892" height="910" alt="Screenshot 2026-04-17 190240" src="https://github.com/user-attachments/assets/2c89fce1-7fed-4beb-821c-09f815a920e2" />
+
 *Figure 2: Security & Fraud Hub. The UI successfully demonstrates a 'Diamond Tier' verification paired with an outstanding 92% AI Trust Score, validating secure telemetry sensor fusion.*
 
 ---
