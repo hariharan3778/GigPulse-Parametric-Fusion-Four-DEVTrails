@@ -15,7 +15,7 @@ export const checkIdempotency = async (req, res, next) => {
 
     try {
         // Atomic Check: Look for an existing claim with this deterministic key
-        // We look for ANY claim with this key created in the last 24 hours
+        // Note: Claim.findOne safely returns null if no transaction history is found (Happy Path).
         const existingClaim = await Claim.findOne({ idempotencyKey });
 
         if (existingClaim) {
@@ -31,7 +31,11 @@ export const checkIdempotency = async (req, res, next) => {
         req.idempotencyKey = idempotencyKey;
         next();
     } catch (error) {
-        console.error("🔥 Idempotency Middleware Error:", error);
-        res.status(500).json({ error: "Internal server error during idempotency check." });
+        // If findOne actually throws, it means MongoDB is disconnected or timing out
+        console.error("🔥 Idempotency Middleware Error (Database Unreachable):", error.message);
+        res.status(500).json({ 
+            error: "Internal server error during idempotency check.",
+            details: error.message 
+        });
     }
 };

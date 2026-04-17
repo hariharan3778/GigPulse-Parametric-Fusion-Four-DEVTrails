@@ -25,7 +25,7 @@ export const checkWeatherEngine = async (coords) => {
  */
 export const verifyFraudEngine = async (sensorData) => {
   try {
-    const response = await api.post('/engine/verify-fraud', sensorData);
+    const response = await api.post('/engine/verify-trust', sensorData);
     return response.data;
   } catch (error) {
     console.error('Fraud Engine Error:', error);

@@ -6,9 +6,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 const router = express.Router();
 
-// Initialize Gemini AI (Using 1.5 Flash as required for high-speed anomaly detection)
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+// Gemini AI model is lazy-loaded inside the trust verification route to prevent boot crashes if the API key is missing.
 
 // ==========================================
 // 1. THE WEATHER TRIGGER ROUTE (Guidewire Slide 4)
@@ -44,9 +42,30 @@ router.post('/check-weather', async (req, res) => {
 // ==========================================
 // 2. THE GEMINI SENSOR FUSION ROUTE (Fraud Verification)
 // ==========================================
-router.post('/verify-fraud', async (req, res) => {
+router.post('/verify-trust', async (req, res) => {
     try {
+        // --- Resilience Layer 1: Environment Variable Check ---
+        if (!process.env.GEMINI_API_KEY) {
+            console.error("🔥 CRITICAL: GEMINI_API_KEY is missing from environment. Engaging fallback.");
+            return res.status(503).json({ 
+                error: "AI Service Temporarily Unavailable",
+                sensor_analysis: { isSpoof: false, trustScore: 50, reason: "Fallback mode: AI Offline" }
+            });
+        }
+
+        // Lazy-load the model
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+        // --- Resilience Layer 2: Payload Verification ---
         const { accelerometer, barometer_hPa } = req.body;
+        
+        if (!accelerometer || !barometer_hPa) {
+            console.warn("⚠️ Bad Request: Missing required telemetry payload.");
+            return res.status(400).json({ 
+                error: "Bad Request: Both accelerometer and barometer_hPa data are required." 
+            });
+        }
 
         const prompt = `
         You are an InsurTech anti-fraud AI evaluating a gig worker's claim. 
@@ -68,21 +87,24 @@ router.post('/verify-fraud', async (req, res) => {
         const result = await model.generateContent(prompt);
         const responseText = result.response.text();
         
-        // Robust JSON Extraction (in case Gemini returns markdown blocks)
         const jsonMatch = responseText.match(/\{[\s\S]*\}/);
         const cleanJson = jsonMatch ? jsonMatch[0] : responseText;
         const aiDecision = JSON.parse(cleanJson);
 
         console.log(`🤖 Gemini AI Trust Analysis Complete. Score: ${aiDecision.trustScore}%`);
 
-        res.status(200).json({
+        return res.status(200).json({
             status: "success",
             sensor_analysis: aiDecision
         });
 
     } catch (error) {
-        console.error("Gemini AI Error:", error);
-        res.status(500).json({ error: "Sensor Fusion AI failed to evaluate." });
+        // --- Resilience Layer 3: Catch-All but Keep Alive ---
+        console.error("🔥 Fraud Engine Unhandled Exception:", error.message);
+        return res.status(500).json({ 
+            error: "Internal Server Error during AI Trust Score calculation.",
+            details: error.message 
+        });
     }
 });
 
