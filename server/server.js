@@ -50,9 +50,32 @@ mongoose.connect(MONGO_URI)
             console.log("⚠️ Could not clear past claims:", err.message);
         }
 
-        app.listen(PORT, () => {
+        const server = app.listen(PORT, () => {
             console.log(`🚀 GigPulse Server running on port ${PORT}`);
         });
+
+        // ==========================================
+        // GRACEFUL SHUTDOWN (SIGTERM / SIGINT)
+        // ==========================================
+        const gracefulShutdown = () => {
+            console.log('\n🛑 Received kill signal, shutting down gracefully...');
+            server.close(() => {
+                console.log('✅ Closed out remaining connections.');
+                mongoose.connection.close(false).then(() => {
+                    console.log('✅ MongoDB connection closed.');
+                    process.exit(0);
+                });
+            });
+
+            // If not shut down within 10s, force close
+            setTimeout(() => {
+                console.error('❌ Could not close connections in time, forcefully shutting down');
+                process.exit(1);
+            }, 10000);
+        };
+
+        process.on('SIGTERM', gracefulShutdown);
+        process.on('SIGINT', gracefulShutdown);
     })
     .catch((error) => {
         console.error('❌ MongoDB Connection Error:', error.message);
