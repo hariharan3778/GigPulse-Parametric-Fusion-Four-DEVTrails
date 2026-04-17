@@ -35,21 +35,19 @@ const weatherDataMock = [
   { time: 'Now', rain: 22 },
 ];
 
-const Dashboard = () => {
+const Dashboard = ({
+  isLoading, setIsLoading,
+  isVerifying, setIsVerifying,
+  claimStatus, setClaimStatus,
+  trustScore, setTrustScore,
+  currentStep, setCurrentStep,
+  sensorData, setSensorData
+}) => {
   // UI States
-  const [isLoading, setIsLoading] = useState(false);
-  const [isVerifying, setIsVerifying] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [claimStatus, setClaimStatus] = useState('idle'); // idle, analyzing, approved, rejected_weather, rejected_fraud
   const [currentRain, setCurrentRain] = useState(22);
   const [realWeather, setRealWeather] = useState(null);
   const [showOverride, setShowOverride] = useState(false);
-  const [trustScore, setTrustScore] = useState(null);
-  const [currentStep, setCurrentStep] = useState(0);
-  const [sensorData, setSensorData] = useState({
-    accel: { x: 0, y: 0, z: 0 },
-    baro: 1013
-  });
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   // Fetch real weather on mount
   useEffect(() => {
@@ -122,18 +120,25 @@ const Dashboard = () => {
 
       const aiResponse = await verifyFraudEngine(simulatedTelemetry);
       const score = aiResponse?.sensor_analysis?.trustScore || 85;
+      setTrustScore(score);
       
       await new Promise(r => setTimeout(r, 800));
 
-      // 3. Final Payout Processor
+      // 3. Conditional Payout Processor - Block if score < 75
+      if (score < 75) {
+        setClaimStatus('rejected_fraud');
+        setIsLoading(false);
+        setIsVerifying(false);
+        return;
+      }
+
       const payoutResult = await processPayout({
         amount: 400,
         userId: "ravi_swig_102",
         weatherCondition: realWeather?.condition || "Heavy Rain",
-        trustScore: 92
+        trustScore: score
       });
 
-      setTrustScore(score);
       setClaimStatus('approved');
       setShowSuccessModal(true);
     } catch (error) {
@@ -205,7 +210,7 @@ const Dashboard = () => {
         isOpen={showSuccessModal} 
         onClose={() => setShowSuccessModal(false)} 
         amount="400"
-        trustScore="92"
+        trustScore={trustScore || "0"}
       />
 
       {/* Demo Control Panel Override */}
@@ -521,7 +526,7 @@ const Dashboard = () => {
                           currentStep >= step.step ? 'text-white' : 'text-slate-500'
                         }`}>{step.label}</span>
                         {currentStep === step.step && (
-                          <span className="text-[10px] text-primary font-bold animate-pulse mt-0.5">Analyzing...</span>
+                          <span className="text-[10px] text-amber-500 font-bold animate-pulse mt-0.5">ANALYZING TELEMETRY...</span>
                         )}
                       </div>
                     </div>
@@ -538,16 +543,21 @@ const Dashboard = () => {
                       >
                         <div className="flex items-start justify-between mb-4">
                           <div>
-                            <p className={`text-[10px] font-black uppercase tracking-widest mb-1 ${claimStatus === 'approved' ? 'text-emerald-400' : 'text-red-400'}`}>
-                              Claim {claimStatus === 'approved' ? 'Result' : 'Blocked'}
-                            </p>
+                          <p className={`text-[10px] font-black uppercase tracking-widest mb-1 ${claimStatus === 'approved' ? 'text-emerald-400' : 'text-red-400'}`}>
+                            CLAIM {claimStatus === 'approved' ? 'VERIFIED' : 'DENIED'}
+                          </p>
                             <div className="flex items-center gap-3">
                               <p className="text-white font-black text-2xl tracking-tighter">
                                 {claimStatus === 'approved' ? '₹400 Initiated' : 'Denied'}
                               </p>
                               {claimStatus === 'approved' && (
                                 <span className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full text-[9px] font-black uppercase tracking-widest">
-                                  <CheckCircle2 size={12} /> Verified
+                                  <CheckCircle2 size={12} /> ELIGIBLE: VERIFIED
+                                </span>
+                              )}
+                              {claimStatus === 'rejected_fraud' && (
+                                <span className="flex items-center gap-1.5 px-3 py-1 bg-red-500/10 text-red-500 border border-red-500/20 rounded-full text-[9px] font-black uppercase tracking-widest">
+                                  <AlertTriangle size={12} /> INELIGIBLE: HIGH RISK
                                 </span>
                               )}
                             </div>
@@ -559,7 +569,7 @@ const Dashboard = () => {
                         <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden mb-2">
                            <div className={`h-full transition-all duration-1000 ${claimStatus === 'approved' ? 'bg-emerald-500 w-[92%]' : 'bg-red-500 w-[42%]'}`}></div>
                         </div>
-                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest text-right">
+                        <p className={`text-[10px] font-bold uppercase tracking-widest text-right ${trustScore < 75 ? 'text-red-500' : 'text-slate-400'}`}>
                           AI Trust Score: {trustScore}%
                         </p>
                         
@@ -761,11 +771,13 @@ const Dashboard = () => {
                       <span className="text-4xl font-black text-primary tracking-tighter">{claimStatus !== 'idle' ? trustScore : '0'}%</span>
                     </div>
                     <div className="w-full bg-white/5 h-3 rounded-full overflow-hidden flex shadow-inner">
-                      <div className="bg-primary h-full transition-all duration-1000 shadow-[0_0_15px_#14b8a6]" style={{ width: `${claimStatus !== 'idle' ? trustScore : 0}%` }}></div>
+                      <div className={`h-full transition-all duration-1000 shadow-[0_0_15px_rgba(20,184,166,0.5)] ${trustScore < 75 && claimStatus !== 'idle' ? 'bg-red-500 shadow-red-500/50' : 'bg-primary shadow-primary/50'}`} style={{ width: `${claimStatus !== 'idle' ? trustScore : 0}%` }}></div>
                     </div>
                     <div className="flex justify-between">
-                       <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Threshold for Approval: 70%</span>
-                       <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-widest">Status: Eligible</span>
+                       <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Threshold for Approval: 75%</span>
+                       <span className={`text-[9px] font-black uppercase tracking-widest ${claimStatus === 'approved' ? 'text-emerald-400' : (claimStatus === 'rejected_fraud' ? 'text-red-500' : 'text-slate-400')}`}>
+                         Status: {claimStatus === 'approved' ? 'ELIGIBLE: VERIFIED' : (claimStatus === 'rejected_fraud' ? 'INELIGIBLE: HIGH RISK DETECTED' : 'AWAITING ANALYSIS')}
+                       </span>
                     </div>
                  </div>
                </div>

@@ -12,13 +12,19 @@
 ## 🚀 The Elevator Pitch
 **GigPulse is an AI-driven parametric insurance platform designed to protect India’s 15 million gig workers from climate-induced income loss.** By combining real-time weather oracles with a Gemini-powered 'Trust Engine' and bank-grade idempotency, we deliver instant, fraud-proof payouts the moment a storm hits—transforming unpredictable weather into predictable financial security.
 
-## 📊 Pitch Deck & Demo Video
-> **[Click here to view the GigPulse Pitch Deck (Google Drive) →](https://drive.google.com/file/d/1n9kFh5nnzzMrtMKwbLGT5rVrqNi46bE0/view?usp=sharing)**
+## 📽️ Mandatory Links
 
-> **[Click here to watch the "Happy Path" Demo Video (YouTube/Loom) →](PASTE_YOUR_VIDEO_LINK_HERE)**
+### 📊 Pitch Deck
+> 🚀 **[View High-Resolution Pitch Deck (Google Drive) →](https://drive.google.com/file/d/1n9kFh5nnzzMrtMKwbLGT5rVrqNi46bE0/view?usp=sharing)**
+> *Comprehensive overview of the GigPulse product strategy and business model.*
 
-## 📄 Technical Whitepaper
-> **[Click here to read the System Architecture & Technical Specifications (PDF) →](https://drive.google.com/file/d/1uYbhqCRrvSwlLvf7Hnq9Eu24ctL3lWyC/view?usp=sharing)**
+### 🎬 Demo Video
+> 🎥 **[Watch the "Happy Path" Demo Video (YouTube/Loom) →](PASTE_YOUR_VIDEO_LINK_HERE)**
+> *End-to-end demonstration of the parametric insurance claim flow and AI validation.*
+
+### 📄 Technical Whitepaper
+> 📖 **[Read the System Architecture & Technical Specifications (PDF) →](https://drive.google.com/file/d/1uYbhqCRrvSwlLvf7Hnq9Eu24ctL3lWyC/view?usp=sharing)**
+> *Detailed teardown of our sensor fusion architecture and idempotency engine.*
 
 ---
 
@@ -42,6 +48,9 @@ In a high-velocity parametric system, double-payouts are a fatal risk. GigPulse 
 ## 🧠 AI Trust Engine: Sensor Fusion via Gemini 1.5 Flash
 Spoofing GPS is easy; spoofing physics is impossible. GigPulse uses **Google Gemini 1.5 Flash** to analyze a multidimensional telemetry payload:
 
+![Sensor Fusion Architecture Simulation](docs/assets/sensor_fusion.png)
+*Figure: The Sensor Fusion Architecture. Raw micro-vibrations and multi-axis accelerometer telemetry from the claimant's device are seamlessly processed by Gemini 1.5 Flash. By analyzing the chaotic physical signatures, the AI robustly verifies true physical locomotion, completely isolating and defeating location-spoofed claims based on immutable physical evidence.*
+
 | Pillar | Data Source | Validation Logic |
 | :--- | :--- | :--- |
 | **Physical Activity** | `Accelerometer` | Detects the chaotic vibration signature of a moving two-wheeler vs. a static spoofed device. |
@@ -59,14 +68,15 @@ Spoofing GPS is easy; spoofing physics is impossible. GigPulse uses **Google Gem
   
 ---
 
-## 📸 Interface Preview
-<img width="1908" height="905" alt="Screenshot 2026-04-17 190143" src="https://github.com/user-attachments/assets/fc7103fa-e527-438d-b71b-bc731975d4ce" />
+## 📸 Interface Preview & Visual Evidence
 
-*Figure 1: Professional Transaction Ledger with zebra-striping and status badges.*
+### Transaction Ledger
+![Transaction Ledger Dashboard](docs/assets/ledger.png)
+*Figure 1: Professional Transaction Ledger featuring transparent status indication, zebra-striping, and a high-end financial tool aesthetic.*
 
-<img width="1892" height="910" alt="Screenshot 2026-04-17 190240" src="https://github.com/user-attachments/assets/9dc38573-d33c-47f0-868b-7af0fb83b2fa" />
-
-*Figure 2: AI Trust Score visualization and real-time sensor fusion telemetry.*
+### Security & Fraud Hub
+![Security and Fraud Hub with High Trust Score](docs/assets/security_hub.png)
+*Figure 2: Security & Fraud Hub. The UI successfully demonstrates a 'Diamond Tier' verification paired with an outstanding 92% AI Trust Score, validating secure telemetry sensor fusion.*
 
 ---
 

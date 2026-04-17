@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, TrendingUp, ShieldCheck, ArrowRight, Wallet } from 'lucide-react';
 
-const SuccessModal = ({ isOpen, onClose, amount = "400", trustScore = "92" }) => {
+const SuccessModal = ({ isOpen, onClose, amount = "400", trustScore = "0" }) => {
   return (
     <AnimatePresence>
       {isOpen && (

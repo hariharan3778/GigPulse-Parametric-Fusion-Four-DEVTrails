@@ -10,6 +10,15 @@ import Settings from './pages/Settings';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [claimStatus, setClaimStatus] = useState('idle'); // idle, analyzing, approved, rejected_weather, rejected_fraud, rejected_limit
+  const [trustScore, setTrustScore] = useState(null);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [sensorData, setSensorData] = useState({
+    accel: { x: 0, y: 0, z: 0 },
+    baro: 1013
+  });
 
   const getPageTitle = () => {
     switch (activeTab) {
@@ -24,14 +33,23 @@ function App() {
   };
 
   const renderContent = () => {
+    const sharedProps = {
+      isLoading, setIsLoading,
+      isVerifying, setIsVerifying,
+      claimStatus, setClaimStatus,
+      trustScore, setTrustScore,
+      currentStep, setCurrentStep,
+      sensorData, setSensorData
+    };
+
     switch (activeTab) {
-      case 'dashboard': return <Dashboard />;
+      case 'dashboard': return <Dashboard {...sharedProps} />;
       case 'policies': return <Policies />;
       case 'claims': return <Claims />;
       case 'risk': return <RiskEngine />;
-      case 'security': return <SecurityView />;
+      case 'security': return <SecurityView {...sharedProps} />;
       case 'settings': return <Settings />;
-      default: return <Dashboard />;
+      default: return <Dashboard {...sharedProps} />;
     }
   };
 

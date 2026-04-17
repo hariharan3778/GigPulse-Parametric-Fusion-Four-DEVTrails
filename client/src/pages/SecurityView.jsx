@@ -2,7 +2,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ShieldCheck, Zap, AlertTriangle, ChevronRight, Activity, Cpu } from 'lucide-react';
 
-const SecurityView = () => {
+const SecurityView = ({
+  isLoading,
+  isVerifying,
+  claimStatus,
+  trustScore
+}) => {
   const logs = [
     { time: '13:08:27', type: 'Sensor Fusion', message: 'Atmospheric pressure drop detected (-2.4 hPa)', status: 'Valid' },
     { time: '13:08:28', type: 'Behavioral AI', message: 'Motion signature matches 2-wheeler in rain', status: 'Valid' },
@@ -45,17 +50,26 @@ const SecurityView = () => {
               <div className="w-full bg-background border border-white/10 p-8 rounded-[3rem] space-y-10 shadow-2xl">
                  <div className="flex justify-between items-center px-4">
                     <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Trust Calculation Score</span>
-                    <span className="text-[11px] font-black text-emerald-400 uppercase tracking-widest font-mono">Status: Optimal</span>
+                    <span className={`text-[11px] font-black uppercase tracking-widest font-mono ${
+                      (isLoading || isVerifying) ? 'text-amber-500 animate-pulse' :
+                      (claimStatus === 'approved' ? 'text-emerald-400' : (claimStatus === 'rejected_fraud' ? 'text-red-500' : 'text-slate-500'))
+                    }`}>
+                      { (isLoading || isVerifying) ? 'ANALYZING TELEMETRY...' : 
+                        (claimStatus === 'approved' ? 'STATUS: OPTIMAL' : (claimStatus === 'rejected_fraud' ? 'STATUS: HIGH RISK' : 'STATUS: AWAITING')) 
+                      }
+                    </span>
                  </div>
                  <div className="w-full bg-white/5 h-4 rounded-full overflow-hidden">
                     <motion.div 
                       initial={{ width: 0 }}
-                      animate={{ width: "99.7%" }}
+                      animate={{ width: `${claimStatus !== 'idle' ? (trustScore || 0) : 0}%` }}
                       transition={{ duration: 2, ease: "easeOut" }}
-                      className="bg-primary h-full shadow-[0_0_25px_#14b8a6]"
+                      className={`h-full shadow-[0_0_25px_rgba(20,184,166,0.5)] ${trustScore < 75 ? 'bg-red-500 shadow-red-500/50' : 'bg-primary shadow-primary/50'}`}
                     ></motion.div>
                  </div>
-                 <span className="text-7xl font-black text-white tracking-tighter block mt-4">99.7%</span>
+                 <span className={`text-7xl font-black tracking-tighter block mt-4 transition-colors ${trustScore < 75 ? 'text-red-500' : 'text-white'}`}>
+                    {claimStatus !== 'idle' ? (trustScore || '0') : '0'}%
+                 </span>
               </div>
            </div>
         </div>
