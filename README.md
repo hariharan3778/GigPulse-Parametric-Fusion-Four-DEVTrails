@@ -3,7 +3,6 @@
 
 [![Build in Public Launch](https://img.shields.io/badge/LinkedIn-Official_Launch_Post-0A66C2?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/posts/hari-haran-192b22328_fusionfour-guidewiredevtrails-unicornchase-ugcPost-7438502661471047680-MMfF/)
 > *🏆 Official Entry for the Guidewire DEVTrails 2026 "Unicorn Chase"*
-
 [![Live Demo](https://img.shields.io/badge/Demo-Live_on_Vercel-000000?style=for-the-badge&logo=vercel)](https://gig-pulse-parametric-fusion-four-de.vercel.app/)
 [![API Status](https://img.shields.io/badge/API-Live_on_Render-46E3B7?style=for-the-badge&logo=render)](https://gigpulse-parametric-fusion-four-devtrails.onrender.com)
 
@@ -72,10 +71,12 @@ Spoofing GPS is easy; spoofing physics is impossible. GigPulse uses **Google Gem
 
 ### Transaction Ledger
 ![Transaction Ledger Dashboard](docs/assets/ledger.png)
+
 *Figure 1: Professional Transaction Ledger featuring transparent status indication, zebra-striping, and a high-end financial tool aesthetic.*
 
 ### Security & Fraud Hub
-![Security and Fraud Hub with High Trust Score](docs/assets/security_hub.png)
+<img width="1424" height="674" alt="WhatsApp Image 2026-04-17 at 9 02 18 PM" src="https://github.com/user-attachments/assets/df1b05c4-d568-44c0-a39f-15f67c34e12a" />
+
 *Figure 2: Security & Fraud Hub. The UI successfully demonstrates a 'Diamond Tier' verification paired with an outstanding 92% AI Trust Score, validating secure telemetry sensor fusion.*
 
 ---
