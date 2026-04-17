@@ -12,6 +12,23 @@
 ## 🚀 The Elevator Pitch
 **GigPulse is an AI-driven parametric insurance platform designed to protect India’s 15 million gig workers from climate-induced income loss.** By combining real-time weather oracles with a Gemini-powered 'Trust Engine' and bank-grade idempotency, we deliver instant, fraud-proof payouts the moment a storm hits—transforming unpredictable weather into predictable financial security.
 
+### 🔄 The Zero-Touch Architecture Flow
+```mermaid
+graph TD
+    classDef default fill:#f9f9f9,stroke:#333,stroke-width:2px,color:#000;
+    classDef trigger fill:#ffe0b2,stroke:#f57c00,stroke-width:2px,color:#000;
+    classDef ai fill:#e1bee7,stroke:#8e24aa,stroke-width:2px,color:#000;
+    classDef success fill:#c8e6c9,stroke:#388e3c,stroke-width:2px,color:#000;
+    classDef fallback fill:#ffcdd2,stroke:#d32f2f,stroke-width:2px,color:#000;
+
+    A[Ravi is Delivering] --> B(Severe Weather hits >50mm Rain):::trigger
+    B --> C{OpenWeatherMap API Triggers}:::trigger
+    C --> D[GigPulse AI Evaluates Trust Score]:::ai
+    D -->|Score > 85%| E[Zero-Touch: ₹400 Credited to Wallet]:::success
+    D -->|Score < 85%| F[UX Fallback: Request 5-Sec Environment Scan]:::fallback
+    F -->|Video Uploaded Async| E
+```
+
 ## 📽️ Mandatory Links
 
 ### 📊 Pitch Deck
@@ -57,6 +74,32 @@ Spoofing GPS is easy; spoofing physics is impossible. GigPulse uses **Google Gem
 | **Atmospheric Pressure**| `Barometer` | Cross-references device-level pressure drops with local storm systems from OpenWeatherMap. |
 | **Environment Scan** | `Camera/Video` | Fallback loop for suspicious claims requiring a 5-second video hash. |
 
+### 📡 Example Sensor Fusion Payload
+```json
+{
+  "claimId": "chk_98765xyz",
+  "userId": "ravi_swig_102",
+  "gps": {
+    "lat": 13.0827,
+    "lng": 80.2707,
+    "accuracy": "15m"
+  },
+  "telemetry": {
+    "accelerometer_variance": 4.22, 
+    "barometer_hPa": 998.5,
+    "wifi_bssids_hashed": ["a1b2c", "d3e4f"]
+  },
+  "trustScore": 92.4,
+  "status": "APPROVED_FOR_PAYOUT"
+}
+```
+## 💰 The Financial Engine: Parametric Revenue Model
+To scale as a "Unicorn" InsurTech, GigPulse utilizes a High-Velocity Micro-Premium Model, passing saved administrative overhead directly to gig workers.
+
+* **The Micro-Subscription:** Workers pay a weekly "Protection Fee" of ₹70 (less than a single meal).
+* **Dynamic Solvency Pool:** 85% of premiums are locked into a Decentralized Liquidity Pool. Because extreme weather is geographically isolated, the "Float" from unaffected regions funds the payouts for affected regions.
+* **Gemini-Optimized Pricing:** Gemini API analyzes historical weather patterns vs. payout frequency to adjust premiums dynamically, ensuring platform profitability during heavy monsoons.
+  
 ---
 ## 🛠️ Technical Stack
 
