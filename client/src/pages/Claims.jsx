@@ -98,7 +98,7 @@ const Claims = () => {
                   </td>
                   <td className="px-8 py-8">
                     <div className="flex justify-center">
-                      <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border border-current bg-opacity-10 ${claim.status === 'Paid' ? 'text-emerald-400 bg-emerald-400' : 'text-red-400 bg-red-400'}`}>
+                      <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${claim.status === 'Paid' ? 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20' : 'text-red-400 bg-red-400/10 border-red-400/20'}`}>
                         {claim.status === 'Paid' ? 'Settled' : 'Rejected'}
                       </span>
                     </div>
