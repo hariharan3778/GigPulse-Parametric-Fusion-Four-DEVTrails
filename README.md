@@ -9,17 +9,22 @@
 
 ---
 
-## 📋 Executive Summary
-**GigPulse Parametric** is a zero-touch, AI-pioneering micro-insurance platform designed to solve the financial volatility of India's gig economy. Every year, millions of delivery partners lose up to 30% of their weekly income due to extreme weather anomalies (monsoons, heatwaves) that force them off the road. 
+## 🚀 The Elevator Pitch
+**GigPulse is an AI-driven parametric insurance platform designed to protect India’s 15 million gig workers from climate-induced income loss.** By combining real-time weather oracles with a Gemini-powered 'Trust Engine' and bank-grade idempotency, we deliver instant, fraud-proof payouts the moment a storm hits—transforming unpredictable weather into predictable financial security.
 
-Traditional insurance is too slow and bureaucratic for the gig worker. GigPulse introduces **Parametric Insurance**: instant, automated payouts triggered by verified environmental data. No claims, no paperwork, no waiting. Just pure financial resilience.
-
-## 📽️ Pitch Deck
-> **[View High-Resolution Pitch Deck (Google Drive) →](https://google.com)**
-> *Placeholder: Replace with your actual Google Drive link.*
+## 📊 Pitch Deck & Demo Video
+> **[Click here to view the GigPulse Pitch Deck (Google Drive) →](PASTE_YOUR_GOOGLE_DRIVE_LINK_HERE)**
+> 
+> **[Click here to watch the "Happy Path" Demo Video (YouTube/Loom) →](PASTE_YOUR_VIDEO_LINK_HERE)**
 
 ---
 
+## 🏆 Technical Highlights (Why We Win)
+* **The Steel Trap (Idempotency):** We implemented deterministic idempotency keys and atomic database locks to solve the "Retry Problem," preventing double-spending during unstable network conditions.
+* **Multidimensional Sensor Fusion:** Beyond GPS, our system analyzes accelerometer and barometer signatures via Gemini 1.5 Flash to verify that a rider is actually in the rain, defeating emulator-based fraud.
+* **Production-Ready Resilience:** The backend features SIGTERM listeners for graceful shutdowns and a `/api/health` heartbeat route for real-time diagnostic telemetry.
+
+---
 ## ⚡ Key Innovation: The "Steel Trap" Idempotency Engine
 In a high-velocity parametric system, double-payouts are a fatal risk. GigPulse implements a sophisticated **Idempotency Layer**—our "Steel Trap"—that guarantees exactly one payout per user, per event, per day.
 
