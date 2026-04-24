@@ -1,37 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle2, CloudRain, Clock, ArrowRight, Zap, History, ShieldCheck } from 'lucide-react';
+import api from '../services/api';
 
 const Claims = () => {
-  const claims = [
-    {
-      id: "CLM-9102-CH",
-      date: "04 Apr 2026",
-      trigger: "58mm Rainfall",
-      status: "Paid",
-      amount: "₹400",
-      razorpayId: "pay_xyz_88712",
-      type: "Weather"
-    },
-    {
-      id: "CLM-8831-CH",
-      date: "28 Mar 2026",
-      trigger: "52mm Rainfall",
-      status: "Paid",
-      amount: "₹400",
-      razorpayId: "pay_abc_11223",
-      type: "Weather"
-    },
-    {
-      id: "CLM-7712-CH",
-      date: "14 Mar 2026",
-      trigger: "42mm Rainfall",
-      status: "Rejected",
-      amount: "₹0",
-      reason: "Below Threshold",
-      type: "Weather"
-    }
-  ];
+  const [claims, setClaims] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await api.get('/user-stats');
+        if (response.data.success && response.data.claims) {
+          setClaims(response.data.claims);
+        }
+      } catch (err) {
+        console.error("Failed to load claims:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
+  }, []);
 
   return (
     <motion.div 
@@ -77,12 +67,20 @@ const Claims = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/[0.05]">
-              {claims.map((claim, idx) => (
+              {loading ? (
+                <tr>
+                  <td colSpan="5" className="px-8 py-8 text-center text-slate-500 font-bold uppercase">Loading transactions...</td>
+                </tr>
+              ) : claims.length === 0 ? (
+                <tr>
+                  <td colSpan="5" className="px-8 py-8 text-center text-slate-500 font-bold uppercase">No transactions found</td>
+                </tr>
+              ) : claims.map((claim, idx) => (
                 <tr key={idx} className="hover:bg-white/[0.02] transition-all group even:bg-white/[0.01]">
                   <td className="px-8 py-8">
                     <div className="flex flex-col gap-1">
-                      <span className="text-sm font-black text-white tracking-tight uppercase">{claim.id}</span>
-                      <span className="text-[10px] text-slate-500 font-bold uppercase font-mono">{claim.date}</span>
+                      <span className="text-sm font-black text-white tracking-tight uppercase">{claim._id.substring(claim._id.length - 8)}</span>
+                      <span className="text-[10px] text-slate-500 font-bold uppercase font-mono">{new Date(claim.timestamp).toDateString()}</span>
                     </div>
                   </td>
                   <td className="px-8 py-8">
@@ -91,21 +89,21 @@ const Claims = () => {
                         <CloudRain size={14} className="text-primary" />
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-xs font-black text-slate-200 uppercase tracking-tight">{claim.trigger}</span>
-                        <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">{claim.type} Analysis</span>
+                        <span className="text-xs font-black text-slate-200 uppercase tracking-tight">{claim.triggerEvent}</span>
+                        <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">{claim.isFraud ? 'Flagged' : 'Auto'} Analysis</span>
                       </div>
                     </div>
                   </td>
                   <td className="px-8 py-8">
                     <div className="flex justify-center">
-                      <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${claim.status === 'Paid' ? 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20' : 'text-red-400 bg-red-400/10 border-red-400/20'}`}>
-                        {claim.status === 'Paid' ? 'Settled' : 'Rejected'}
+                      <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${claim.status === 'Paid' ? 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20' : claim.status === 'Pending' ? 'text-amber-400 bg-amber-400/10 border-amber-400/20' : 'text-red-400 bg-red-400/10 border-red-400/20'}`}>
+                        {claim.status === 'Paid' ? 'Settled' : claim.status}
                       </span>
                     </div>
                   </td>
                   <td className="px-8 py-8 text-right">
                     <div className="flex flex-col items-end gap-1">
-                      <span className={`text-xl font-black ${claim.status === 'Paid' ? 'text-white' : 'text-slate-700'}`}>{claim.amount}</span>
+                      <span className={`text-xl font-black ${claim.status === 'Paid' ? 'text-white' : 'text-slate-700'}`}>₹{claim.payoutAmount}</span>
                       {claim.status === 'Paid' && (
                         <span className="flex items-center gap-1 text-[8px] font-black uppercase tracking-widest text-emerald-500 bg-emerald-400/5 px-2 py-0.5 rounded-md border border-emerald-500/10">
                           <CheckCircle2 size={10} /> Verified

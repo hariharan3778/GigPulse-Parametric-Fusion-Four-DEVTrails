@@ -1,7 +1,8 @@
 import express from 'express';
 import axios from 'axios';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import fraudEngineService from '../services/fraudEngine.service.js';
 import dotenv from 'dotenv';
+import logger from '../utils/logger.js';
 
 dotenv.config();
 const router = express.Router();
@@ -34,7 +35,7 @@ router.post('/check-weather', async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Weather API Error:", error.message);
+        logger.error(`Weather API Error: ${error.message}`);
         res.status(500).json({ error: "Failed to fetch weather data" });
     }
 });
@@ -44,54 +45,26 @@ router.post('/check-weather', async (req, res) => {
 // ==========================================
 router.post('/verify-trust', async (req, res) => {
     try {
-        // --- Resilience Layer 1: Environment Variable Check ---
-        if (!process.env.GEMINI_API_KEY) {
-            console.error("🔥 CRITICAL: GEMINI_API_KEY is missing from environment. Engaging fallback.");
-            return res.status(503).json({ 
-                error: "AI Service Temporarily Unavailable",
-                sensor_analysis: { isSpoof: false, trustScore: 50, reason: "Fallback mode: AI Offline" }
-            });
-        }
-
-        // Lazy-load the model
-        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
-        // --- Resilience Layer 2: Payload Verification ---
         const { accelerometer, barometer_hPa } = req.body;
         
         if (!accelerometer || !barometer_hPa) {
-            console.warn("⚠️ Bad Request: Missing required telemetry payload.");
+            logger.warn("Bad Request: Missing required telemetry payload.");
             return res.status(400).json({ 
                 error: "Bad Request: Both accelerometer and barometer_hPa data are required." 
             });
         }
 
-        const prompt = `
-        You are an InsurTech anti-fraud AI evaluating a gig worker's claim. 
-        A severe storm is happening, but we need to verify the worker is actually outside on a motorcycle, NOT spoofing their GPS from a desk.
-        
-        Analyze this raw smartphone sensor data:
-        - Accelerometer Variance (X, Y, Z): ${JSON.stringify(accelerometer)}
-        - Barometer: ${barometer_hPa} hPa
-        
-        Rules for evaluation:
-        1. If accelerometer variance is near [0, 0, 0], the phone is sitting flat on a table. This is a SPOOFING ATTACK.
-        2. A motorcycle in a storm will have high, chaotic variance.
-        3. A dropping barometer (below 1005 hPa) confirms bad weather locally.
-        
-        Respond ONLY with a valid JSON object in this exact format:
-        { "isSpoof": boolean, "trustScore": number, "reason": "short explanation" }
-        `;
+        const aiDecision = await fraudEngineService.verifyTrust(accelerometer, barometer_hPa);
 
-        const result = await model.generateContent(prompt);
-        const responseText = result.response.text();
-        
-        const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-        const cleanJson = jsonMatch ? jsonMatch[0] : responseText;
-        const aiDecision = JSON.parse(cleanJson);
-
-        console.log(`🤖 Gemini AI Trust Analysis Complete. Score: ${aiDecision.trustScore}%`);
+        if (aiDecision.decision === 'REJECTED_SPOOF') {
+            logger.warn(`Spoofing Detected. Trace ID: ${aiDecision.traceId}`);
+            return res.status(403).json({
+                status: "fail",
+                error: "Forbidden: Telemetry manipulation detected",
+                traceId: aiDecision.traceId,
+                sensor_analysis: aiDecision
+            });
+        }
 
         return res.status(200).json({
             status: "success",
@@ -99,17 +72,8 @@ router.post('/verify-trust', async (req, res) => {
         });
 
     } catch (error) {
-        // --- Resilience Layer 3: Catch-All but Keep Alive ---
-        // DEMO OVERRIDE: Prevent 500 network errors due to Gemini API Rate Limits or 503 Outages.
-        console.warn("🛡️ Gemini API Failure. Triggering Backend Demo Override:", error.message);
-        return res.status(200).json({
-            status: "success",
-            sensor_analysis: {
-                isSpoof: false,
-                trustScore: 92,
-                reason: "[OVERRIDE] Telemetry physics validated by Edge layer."
-            }
-        });
+        logger.error(`Fraud Verification Error: ${error.message}`);
+        return res.status(500).json({ error: "Failed to verify trust" });
     }
 });
 

@@ -46,12 +46,12 @@ function App() {
   };
 
   return (
-    <div className="flex h-screen bg-background text-white w-full overflow-hidden">
+    <div className="flex h-[100dvh] bg-background text-white w-full overflow-hidden">
       {/* Sidebar - Now uses router links */}
       <Sidebar />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 h-[100dvh] overflow-hidden">
         <Navbar title={getPageTitle()} />
         
         <main className="flex-1 overflow-y-auto pb-40 lg:pb-10 transition-all duration-300">

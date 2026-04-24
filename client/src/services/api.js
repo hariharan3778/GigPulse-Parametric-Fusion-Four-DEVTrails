@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-// 1. Pointed the base instance to your live Render API
+// 1. Pointed the base instance to the local backend for the live demo
 const api = axios.create({
-  baseURL: 'https://gigpulse-parametric-fusion-four-devtrails.onrender.com/api',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5017/api',
 });
 
 /**
@@ -32,8 +32,8 @@ export const verifyFraudEngine = async (sensorData) => {
     return {
       status: "success",
       sensor_analysis: {
-        isSpoof: false,
-        trustScore: 92,
+        score: 92,
+        decision: "APPROVED",
         reason: "Verified telemetry. Diamond Tier."
       }
     };
@@ -43,13 +43,12 @@ export const verifyFraudEngine = async (sensorData) => {
 /**
  * 3. Final Payout Processor
  */
-export const processPayout = async (claimData) => {
+export const processPayout = async (claimData, idempotencyKey) => {
   try {
-    // 2. Fixed the sneaky hardcoded localhost URL here! 
-    // Now it uses the dynamic baseURL properly.
     const response = await api.post('/payment/initiate-claim', claimData, {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'x-idempotency-key': idempotencyKey || `req_${Date.now()}`
       }
     });
     return response.data;

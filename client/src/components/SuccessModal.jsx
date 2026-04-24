@@ -46,7 +46,7 @@ const SuccessModal = ({ isOpen, onClose, amount = "400", trustScore = "0", claim
             initial={{ scale: 0.95, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 20 }}
-            className={`relative z-10 glass-card bg-surface/80 backdrop-blur-3xl border border-${theme.primary}/30 p-6 md:p-10 max-w-lg w-full flex flex-col items-center text-center shadow-[0_0_80px_-15px_inherit] my-auto shrink-0 max-h-[85vh] overflow-y-auto overflow-x-hidden`}
+            className={`relative z-10 glass-card bg-surface/80 backdrop-blur-3xl border border-${theme.primary}/30 p-6 md:p-10 max-w-lg w-full flex flex-col items-center text-center shadow-[0_0_80px_-15px_inherit] my-auto shrink-0 max-h-[85dvh] overflow-y-auto overflow-x-hidden`}
             style={{ boxShadow: isDenied ? 'inset 0 0 80px -15px rgba(239, 68, 68, 0.2)' : 'inset 0 0 80px -15px rgba(16, 185, 129, 0.2)' }}
           >
             {/* Header Status */}

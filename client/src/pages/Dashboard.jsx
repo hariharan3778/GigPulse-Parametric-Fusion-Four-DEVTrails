@@ -119,7 +119,7 @@ const Dashboard = ({
       });
 
       const aiResponse = await verifyFraudEngine(simulatedTelemetry);
-      const score = aiResponse?.sensor_analysis?.trustScore || 85;
+      const score = aiResponse?.sensor_analysis?.score ?? 85;
       setTrustScore(score);
       
       await new Promise(r => setTimeout(r, 800));
@@ -136,9 +136,12 @@ const Dashboard = ({
       const payoutResult = await processPayout({
         amount: 400,
         userId: "ravi_swig_102",
+        rain_1h_mm: currentRain, // Backend needs dynamic payload info
         weatherCondition: realWeather?.condition || "Heavy Rain",
-        trustScore: score
-      });
+        aiTrustScore: score,
+        isFraud: score < 75,
+        reason: aiResponse?.sensor_analysis?.reason
+      }, `claim_ui_${Date.now()}`);
 
       setClaimStatus('approved');
       setShowSuccessModal(true);

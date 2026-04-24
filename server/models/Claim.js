@@ -8,6 +8,8 @@ const claimSchema = new mongoose.Schema({
     idempotencyKey: { type: String, unique: true, sparse: true }, // The "Steel Trap" Key
     // The Rollback Metric: Status must be precise so we don't lose money
     status: { type: String, enum: ['Pending', 'Paid', 'Failed'], default: 'Pending' },
+    isFraud: { type: Boolean, default: false },
+    reason: { type: String },
     timestamp: { type: Date, default: Date.now }
 });
 
